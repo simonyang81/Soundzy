@@ -1,3 +1,5 @@
+import { AppStorageV2, window } from "@kit.ArkUI";
+
 // 跳转页面的入口函数
 @Builder
 export function SplashBuilder() {
@@ -8,11 +10,9 @@ export function SplashBuilder() {
 struct Splash {
 
   intervalId: number | null = null;
-
-  // 控制跳转的对象
-  pathStack: NavPathStack = new NavPathStack();
-
   @Local timer: number = 5;
+
+  pathStack : NavPathStack = AppStorageV2.connect(NavPathStack, 'pathStack', () => new NavPathStack())!;
 
   // 生命周期
   aboutToAppear(): void {
@@ -35,6 +35,17 @@ struct Splash {
     clearInterval(this.intervalId)
   }
 
+  /**
+   * 设置状态栏文字颜色
+   */
+  private setStatusBarTextColor(isDark: boolean): void {
+    window.getLastWindow(getContext()).then((windowInstance) => {
+      windowInstance.setWindowSystemBarProperties({
+        statusBarContentColor: isDark ? '#FF000000' : '#FFFFFFFF'
+      });
+    })
+  }
+
   build() {
 
     NavDestination() {
@@ -51,7 +62,7 @@ struct Splash {
         Button(`跳过 ${this.timer}秒`)
           .backgroundColor(Color.Gray)
           .margin({
-            top: 15,
+            top: 35,
             right: 15
           })
           .onClick(() => {
@@ -59,14 +70,13 @@ struct Splash {
           })
       }
 
-      // Button('跳转到Home页面')
-      //   .onClick(() => {
-      //     this.pathStack.pushPathByName("Home", null, true);
-      //   })
     }
     // .title('广告页')
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack;
+    })
+    .onAppear(() => {
+      this.setStatusBarTextColor(false)
     })
 
   }

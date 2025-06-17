@@ -237,17 +237,17 @@ export class HttpUtil {
       // 销毁请求对象
       httpRequest.destroy();
 
-      hilog.info(DOMAIN, TAG, `请求完成: ${response.responseCode}`);
+      hilog.info(DOMAIN, TAG, `-->> 请求完成: ${response.responseCode}`);
 
       // 解析响应数据
       let parsedData: T;
       try {
         const resultStr = response.result as string;
-        hilog.debug(DOMAIN, TAG, `请求返回的response: ${resultStr}`);
+        hilog.debug(DOMAIN, TAG, `-->> 请求返回的response: ${resultStr}`);
         parsedData = JSON.parse(resultStr) as T;
-        hilog.debug(DOMAIN, TAG, `JSON解析后的对象类型: ${typeof parsedData}`)
+        hilog.debug(DOMAIN, TAG, `-->> JSON解析后的对象类型: ${typeof parsedData}`)
       } catch (error) {
-        hilog.warn(DOMAIN, TAG, `JSON解析失败，返回原始字符串: ${error}`);
+        hilog.warn(DOMAIN, TAG, `-->> JSON解析失败，返回原始字符串: ${error}`);
         parsedData = response.result as T;
       }
 
@@ -261,8 +261,8 @@ export class HttpUtil {
       return httpResponse;
 
     } catch (error) {
-      hilog.error(DOMAIN, TAG, `网络请求失败: ${JSON.stringify(error)}`);
-      throw new Error(`网络请求失败: ${error}`);
+      hilog.error(DOMAIN, TAG, `-->> 网络请求失败: ${JSON.stringify(error)}`);
+      throw new Error(`-->> 网络请求失败: ${error}`);
     }
   }
 

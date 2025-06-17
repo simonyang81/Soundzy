@@ -4,6 +4,7 @@ import { CategoryInfo, CategoryInfoData } from "../../services/MusicService";
 export struct Category {
 
   @Param @Require songCategories: CategoryInfoData;
+  @Param @Require onClickEvent: (category: CategoryInfo) => void;
 
   build() {
     List({space: 10}) {
@@ -21,6 +22,7 @@ export struct Category {
             Row() {
               Image(item.album_img_9.replace('{size}', '512'))
                 .width('120')
+                .borderRadius(5)
                 .padding({
                   top: 5,
                   bottom: 5,
@@ -48,6 +50,9 @@ export struct Category {
         .padding(10)
         .borderRadius(8)
         .backgroundColor('#FFE6EAEB')
+        .onClick(() => {
+          this.onClickEvent(item)
+        })
       })
 
     }

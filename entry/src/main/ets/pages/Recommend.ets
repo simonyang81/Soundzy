@@ -5,21 +5,20 @@ import { Song } from "../components/recommend/Song"
 import { TitleWithMore } from "../components/recommend/TitleWithMore"
 import { Banner, MusicService, CategoryInfoData, SongData } from "../services/MusicService"
 import { hilog } from "@kit.PerformanceAnalysisKit"
+import { AppStorageV2 } from "@kit.ArkUI"
 
 const TAG = 'Recommend';
 const DOMAIN = 0xFF00;
 
 @ComponentV2
-// export 导出，别的组件才可以导入去使用
 export struct Recommend {
+
+  pathStack : NavPathStack = AppStorageV2.connect(NavPathStack, 'pathStack', () => new NavPathStack())!;
 
   @Local newSongs: SongData[] = [];
   @Local banner: Banner[] = []
   @Local songCategories: CategoryInfoData = new CategoryInfoData();
-
   @Local isRefreshing: boolean = false;
-
-  // scroller: Scroller = new Scroller()
 
   aboutToAppear(): void {
     this.loadData()
@@ -41,8 +40,7 @@ export struct Recommend {
         this.newSongs = songData.data;
       });
 
-
-      MusicService.getSongCategories().then((category) => {
+      MusicService.getCategories().then((category) => {
         this.songCategories.pushDataAll(category.data.info);
       })
 
@@ -72,8 +70,13 @@ export struct Recommend {
               })
               TitleWithMore({title: '星曜榜'})
               Blank().height(10)
-              Category({songCategories: this.songCategories})
-
+              Category({
+                songCategories: this.songCategories,
+                onClickEvent: (category) => {
+                  hilog.info(DOMAIN, TAG, `-->> 点中的item是${category.rankname}`)
+                  this.pathStack.pushPathByName('CategoryList', category, true)
+                }
+              })
             }
             .width('100%')
           }

@@ -3,12 +3,12 @@ import { Discover } from "./Discover";
 import { Dynamic } from "./Dynamic";
 import { Mine } from "./Mine";
 import { Recommend } from "./Recommend";
+import { AppStorageV2, window } from "@kit.ArkUI";
 
 interface TabClass {
   text: string,
   icon: ResourceStr,
 }
-
 
 // 跳转页面的入口函数
 @Builder
@@ -21,8 +21,7 @@ struct Home {
 
   @Local currentTabIndex: number = 0;
 
-  // 控制跳转的对象
-  pathStack: NavPathStack = new NavPathStack();
+  pathStack : NavPathStack = AppStorageV2.connect(NavPathStack, 'pathStack', () => new NavPathStack())!;
 
   tabData: TabClass[] = [
     {text: '推荐', icon: $r('app.media.ic_recommend')},
@@ -45,6 +44,21 @@ struct Home {
 
   aboutToAppear(): void {
     BaseService.initialize();
+  }
+
+  onPageShow(): void {
+    this.setStatusBarTextColor(true)
+  }
+
+  /**
+   * 设置状态栏文字颜色
+   */
+  private setStatusBarTextColor(isDark: boolean): void {
+    window.getLastWindow(getContext()).then((windowInstance) => {
+      windowInstance.setWindowSystemBarProperties({
+        statusBarContentColor: isDark ? '#FF000000' : '#FFFFFFFF'
+      });
+    })
   }
 
   build() {
@@ -77,11 +91,18 @@ struct Home {
       .onChange((index: number) => {
         this.currentTabIndex = index
       })
-      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
+      .padding({
+        top: 30,
+        bottom: 30,
+      })
+      // .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
 
     }
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
+    })
+    .onAppear(() => {
+      this.onPageShow();
     })
 
   }

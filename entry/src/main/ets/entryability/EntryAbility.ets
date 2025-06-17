@@ -18,6 +18,28 @@ export default class EntryAbility extends UIAbility {
     // Main window is created, set main page for this ability
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
+    // 设置沉浸式状态栏
+    windowStage.getMainWindow().then((windowClass) => {
+      // 设置窗口全屏显示
+      windowClass.setWindowLayoutFullScreen(true).then(() => {
+        hilog.info(DOMAIN, 'testTag', 'Succeeded in setting full-screen mode.');
+      }).catch((err: Error) => {
+        hilog.error(DOMAIN, 'testTag', 'Failed to set full-screen mode. Cause: ' + JSON.stringify(err));
+      });
+
+      // 设置状态栏和导航栏样式
+      windowClass.setWindowSystemBarProperties({
+        statusBarColor: '#00000000', // 透明状态栏
+        navigationBarColor: '#00000000', // 透明导航栏
+        statusBarContentColor: '#FFFFFF', // 状态栏内容为白色
+        navigationBarContentColor: '#FFFFFF' // 导航栏内容为白色
+      }).then(() => {
+        hilog.info(DOMAIN, 'testTag', 'Succeeded in setting system bar properties.');
+      }).catch((err: Error) => {
+        hilog.error(DOMAIN, 'testTag', 'Failed to set system bar properties. Cause: ' + JSON.stringify(err));
+      });
+    });
+
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));

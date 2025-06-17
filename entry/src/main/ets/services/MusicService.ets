@@ -28,11 +28,31 @@ export interface SongData {
 }
 
 export interface Category {
-  data: CategoryData,
+  data: CategorySongData,
 }
 
-export interface CategoryData {
+export interface SongByCategory {
+  data: SongByCategoryData
+}
+
+export interface SongByCategoryData {
+  info: SongByCategoryDataInfo[],
+}
+
+export interface CategorySongData {
   info: CategoryInfo[],
+}
+
+export interface SongByCategoryDataInfo {
+  songname: string,
+  hash: string,
+  album_sizable_cover: string,
+  authors: Authors[],
+}
+
+export interface Authors {
+  author_name: string,
+  sizable_avatar: string,
 }
 
 export interface CategoryInfo {
@@ -148,13 +168,13 @@ export class MusicService extends BaseService {
     }
   }
 
-  static async getSongCategories(): Promise<Category> {
+  static async getCategories(): Promise<Category> {
     try {
 
       hilog.info(DOMAIN, TAG, '-->> 开始获取歌曲分类列表')
 
       const response = await HttpUtil.get<Category>(
-        ApiConfig.URLS.PLAYLIST.SONGS_CATEGORY,
+        ApiConfig.URLS.PLAYLIST.CATEGORIES,
       );
 
       return response.data;
@@ -162,6 +182,22 @@ export class MusicService extends BaseService {
       throw new Error(super.handleError(error as Error));
     }
 
+  }
+
+  static async getSongs(id: string): Promise<SongByCategory> {
+    try {
+
+      hilog.info(DOMAIN, TAG, '-->> 开始按分类获取歌曲列表')
+
+      const response = await HttpUtil.get<SongByCategory>(
+        ApiConfig.URLS.PLAYLIST.SONGS,
+        { 'rankid': id, }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new Error(super.handleError(error as Error));
+    }
   }
 
 }

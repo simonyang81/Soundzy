@@ -4,53 +4,38 @@
  */
 
 /**
- * 音乐相关API端点接口
- */
-interface MusicDetailUrls {
-  RECOMMEND: string;
-  SEARCH: string;
-  DETAIL: string;
-  PLAYLISTS: string;
-  SONGS: string;
-}
-
-/**
  * 播放列表相关API端点接口
  */
 interface PlaylistUrls {
-  NEW_SONG_CHART: string;
-  SONGS_CATEGORY: string;
-  // CREATE: string;
-  // UPDATE: string;
-  // DELETE: string;
-  // SONGS: string;
+  NEW_SONG_CHART: string
+  CATEGORIES: string
+  SONGS: string
 }
 
 /**
  * API端点集合接口
  */
 interface ApiUrl {
-  PLAYLIST: PlaylistUrls;
-  MUSIC: MusicDetailUrls;
+  PLAYLIST: PlaylistUrls
 }
 
 /**
  * 超时配置接口
  */
 interface TimeoutConfig {
-  CONNECT: number;
-  READ: number;
+  CONNECT: number
+  READ: number
 }
 
 /**
  * 状态码配置接口
  */
 interface StatusCodeConfig {
-  SUCCESS: number;
-  UNAUTHORIZED: number;
-  FORBIDDEN: number;
-  NOT_FOUND: number;
-  SERVER_ERROR: number;
+  SUCCESS: number
+  UNAUTHORIZED: number
+  FORBIDDEN: number
+  NOT_FOUND: number
+  SERVER_ERROR: number
 }
 
 export class ApiConfig {
@@ -61,18 +46,10 @@ export class ApiConfig {
     // 播放列表相关
     PLAYLIST: {
       NEW_SONG_CHART: 'http://m.kugou.com/',
-      SONGS_CATEGORY: 'http://mobilecdnbj.kugou.com/api/v3/rank/list',
+      CATEGORIES: 'http://mobilecdnbj.kugou.com/api/v3/rank/list',
+      SONGS: 'http://mobilecdnbj.kugou.com/api/v3/rank/song',
     },
 
-    // 音乐相关
-    MUSIC: {
-      RECOMMEND: '/music/recommend',
-      SEARCH: '/music/search',
-      DETAIL: '/music/detail',
-      PLAYLISTS: '/music/playlists',
-      SONGS: '/music/songs'
-    },
-    
   };
   
   /** 请求超时配置 */
