@@ -1,6 +1,7 @@
 import { HttpUtil } from '../utils/HttpUtil';
 import { ApiConfig } from '../config/ApiConfig';
 import { BaseService } from './BaseService';
+import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /**
  * 推荐歌曲接口
@@ -28,7 +29,6 @@ export interface SongData {
 
 export interface Category {
   data: CategoryData,
-
 }
 
 export interface CategoryData {
@@ -42,20 +42,20 @@ export interface CategoryInfo {
   intro: string,
 }
 
-export class CategoryInfoData implements IDataSource {
+class BaseDataSource<T> implements IDataSource {
 
-  private originDataArray: CategoryInfo[] = [];
-  private listeners: DataChangeListener[] = [];
+  protected originDataArray: T[] = [];
+  protected listeners: DataChangeListener[] = [];
 
   totalCount(): number {
     return this.originDataArray.length;
   }
 
-  getData(index: number): CategoryInfo {
+  getData(index: number): T {
     return this.originDataArray[index];
   }
 
-  public pushDataAll(data: CategoryInfo[]): void {
+  public pushDataAll(data: T[]): void {
     this.originDataArray.push(...data);
     this.notifyDataAdd(this.originDataArray.length - 1);
   }
@@ -70,7 +70,6 @@ export class CategoryInfoData implements IDataSource {
   unregisterDataChangeListener(listener: DataChangeListener): void {
     const pos = this.listeners.indexOf(listener);
     if (pos >= 0) {
-      console.info('remove listener');
       this.listeners.splice(pos, 1);
     }
   }
@@ -113,6 +112,15 @@ export class CategoryInfoData implements IDataSource {
 
 }
 
+export class CategoryInfoData extends BaseDataSource<CategoryInfo> {
+  clearData(): void {
+    this.originDataArray = [];
+  }
+}
+
+const TAG = 'MusicService';
+const DOMAIN = 0xFF00;
+
 /**
  * 音乐服务类
  * 处理音乐相关的API请求
@@ -126,6 +134,9 @@ export class MusicService extends BaseService {
   static async getNewSongs(): Promise<Song> {
 
     try {
+
+      hilog.info(DOMAIN, TAG, '-->> 开始获取新歌')
+
       const response = await HttpUtil.get<Song>(
         ApiConfig.URLS.PLAYLIST.NEW_SONG_CHART,
         {'json': true}
@@ -139,6 +150,9 @@ export class MusicService extends BaseService {
 
   static async getSongCategories(): Promise<Category> {
     try {
+
+      hilog.info(DOMAIN, TAG, '-->> 开始获取歌曲分类列表')
+
       const response = await HttpUtil.get<Category>(
         ApiConfig.URLS.PLAYLIST.SONGS_CATEGORY,
       );

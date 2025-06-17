@@ -222,7 +222,7 @@ export class HttpUtil {
       // 创建HTTP请求
       const httpRequest = http.createHttp();
       
-      hilog.info(DOMAIN, TAG, `发起请求: ${method} ${fullUrl}`);
+      hilog.info(DOMAIN, TAG, `-->> 发起请求: ${method} ${fullUrl}`);
       
       // 发送请求
       const response = await httpRequest.request(fullUrl, {
