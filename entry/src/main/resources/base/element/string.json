@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Soundzy"
+    },
+    {
+      "name": "internet_permission_reason",
+      "value": "需要网络权限来加载网络图片和资源"
+    }
+  ]
+}
