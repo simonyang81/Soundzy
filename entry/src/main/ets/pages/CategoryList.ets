@@ -1,6 +1,7 @@
 import { CategoryInfo, MusicService, SongByCategoryDataInfo } from "../services/MusicService";
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { CommonUtil } from "../utils/CommonUtil";
 
 const TAG = 'CategoryList';
 const DOMAIN = 0xFF00;
@@ -56,18 +57,7 @@ struct CategoryList {
     this.titleOpacity = scrollY > titleShowThreshold ?
       Math.min(1, (scrollY - titleShowThreshold) / (this.HEADER_HEIGHT * 0.3)) : 0;
 
-    this.setStatusBarTextColor(this.headerOpacity < 0.4);
-  }
-
-  /**
-   * 设置状态栏文字颜色
-   */
-  private setStatusBarTextColor(isDark: boolean): void {
-    window.getLastWindow(getContext()).then((windowInstance) => {
-      windowInstance.setWindowSystemBarProperties({
-        statusBarContentColor: isDark ? '#FF000000' : '#FFFFFFFF'
-      });
-    })
+    CommonUtil.setStatusBarTextColor(this.headerOpacity < 0.4);
   }
 
   /**
@@ -75,7 +65,7 @@ struct CategoryList {
    */
   onPageShow(): void {
     this.loadData();
-    this.setStatusBarTextColor(false);
+    CommonUtil.setStatusBarTextColor(false);
   }
 
   /**

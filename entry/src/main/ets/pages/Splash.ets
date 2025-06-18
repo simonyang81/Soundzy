@@ -1,4 +1,5 @@
 import { AppStorageV2, window } from "@kit.ArkUI";
+import { CommonUtil } from "../utils/CommonUtil";
 
 // 跳转页面的入口函数
 @Builder
@@ -35,17 +36,6 @@ struct Splash {
     clearInterval(this.intervalId)
   }
 
-  /**
-   * 设置状态栏文字颜色
-   */
-  private setStatusBarTextColor(isDark: boolean): void {
-    window.getLastWindow(getContext()).then((windowInstance) => {
-      windowInstance.setWindowSystemBarProperties({
-        statusBarContentColor: isDark ? '#FF000000' : '#FFFFFFFF'
-      });
-    })
-  }
-
   build() {
 
     NavDestination() {
@@ -76,7 +66,7 @@ struct Splash {
       this.pathStack = context.pathStack;
     })
     .onAppear(() => {
-      this.setStatusBarTextColor(false)
+      CommonUtil.setStatusBarTextColor(false)
     })
 
   }

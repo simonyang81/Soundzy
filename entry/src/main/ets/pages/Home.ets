@@ -4,6 +4,7 @@ import { Dynamic } from "./Dynamic";
 import { Mine } from "./Mine";
 import { Recommend } from "./Recommend";
 import { AppStorageV2, window } from "@kit.ArkUI";
+import { CommonUtil } from "../utils/CommonUtil";
 
 interface TabClass {
   text: string,
@@ -46,21 +47,6 @@ struct Home {
     BaseService.initialize();
   }
 
-  onPageShow(): void {
-    this.setStatusBarTextColor(true)
-  }
-
-  /**
-   * 设置状态栏文字颜色
-   */
-  private setStatusBarTextColor(isDark: boolean): void {
-    window.getLastWindow(getContext()).then((windowInstance) => {
-      windowInstance.setWindowSystemBarProperties({
-        statusBarContentColor: isDark ? '#FF000000' : '#FFFFFFFF'
-      });
-    })
-  }
-
   build() {
 
     NavDestination() {
@@ -101,8 +87,8 @@ struct Home {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack
     })
-    .onAppear(() => {
-      this.onPageShow();
+    .onShown(() => {
+      CommonUtil.setStatusBarTextColor(true)
     })
 
   }

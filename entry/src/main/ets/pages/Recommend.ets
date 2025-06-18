@@ -5,7 +5,8 @@ import { Song } from "../components/recommend/Song"
 import { TitleWithMore } from "../components/recommend/TitleWithMore"
 import { Banner, MusicService, CategoryInfoData, SongData } from "../services/MusicService"
 import { hilog } from "@kit.PerformanceAnalysisKit"
-import { AppStorageV2 } from "@kit.ArkUI"
+import { AppStorageV2, window } from "@kit.ArkUI"
+import { CommonUtil } from "../utils/CommonUtil"
 
 const TAG = 'Recommend';
 const DOMAIN = 0xFF00;
@@ -74,7 +75,10 @@ export struct Recommend {
                 songCategories: this.songCategories,
                 onClickEvent: (category) => {
                   hilog.info(DOMAIN, TAG, `-->> 点中的item是${category.rankname}`)
-                  this.pathStack.pushPathByName('CategoryList', category, true)
+                  this.pathStack.pushPathByName('CategoryList', category, (popInfo) => {
+                    hilog.info(DOMAIN, TAG, `popInfo: ${popInfo}`)
+                    CommonUtil.setStatusBarTextColor(true);
+                  }, true)
                 }
               })
             }
